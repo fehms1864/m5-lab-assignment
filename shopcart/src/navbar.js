@@ -8,6 +8,7 @@ import Navbar from "react-bootstrap/Navbar";
 import { BrowserRouter as Router, Link, Routes, Route } from 'react-router-dom';
 import DisplayProducts from './displayProducts';
 import Cart from './cart';
+import SignIn from './SignIn';
 
 function Nav(props) {
     return (
@@ -41,7 +42,13 @@ function Nav(props) {
                             handleAddQuantity={props.handleAddQuantity}
                             handleRemoveQuantity={props.handleRemoveQuantity}
                         />
-                    }/>
+                    }
+                />
+                <Route path="/signin"
+                    element={
+                        <SignIn />
+                    }
+                />
             </Routes>
         </Router>
     )
