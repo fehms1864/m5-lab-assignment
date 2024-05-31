@@ -73,6 +73,15 @@
    width: 90%;
 }
 
+.sort-row {
+  border: 1px solid #dbdbdb;
+  border-top: none;
+  border-bottom: none;
+  padding: 3rem 0 3rem 0;
+  display: flex;
+  justify-content: center;
+}
+
 .product-row > div {
   border: 1px solid #dbdbdb;
   border-top: none;
@@ -104,4 +113,8 @@
 .cart-body {
   margin: 3rem auto 0 auto;
   width: 80%;
+}
+
+.item-price {
+  color: red;
 }

@@ -1,5 +1,5 @@
 import './App.css';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { faCirclePlus, faCircleMinus } from "@fortawesome/free-solid-svg-icons";
@@ -13,11 +13,37 @@ function DisplayProducts(props) {
         setShow(true);
         setShowImage(product);
     }
+    const [sortedData, setSortedData] = useState(props.products);
+    const [sortType, setSortType] = useState("normal");
+
+    useEffect(() => {
+        const sortArray = (type) => {
+            let sorted = [...props.products];
+            switch (type) {
+                case "highest":
+                    sorted = [...props.products].sort(
+                        (a, b) => b['price'] - a['price']
+                    );
+                    return setSortedData(sorted);
+                case "lowest":
+                    sorted = [...props.products].sort(
+                        (a, b) => a['price'] - b['price']
+                    );
+                    return setSortedData(sorted);
+                case "normal":
+                    return setSortedData(sorted);
+                default:
+                    return setSortedData(sorted);
+            }
+        };
+        sortArray(sortType);
+    }, [props.products, sortType]);
 
     return (
         <div className='display-products'>
+            <SortRow setSortType={setSortType} />
             <div className='d-flex flex-column mb-3 product-row'>
-                {props.products?.map((item) => {
+                {sortedData.map((item) => {
                     return (
                         <div>
                             <ItemRow item={item} handleShow={handleShow} handleAddQuantity={props.handleAddQuantity} handleRemoveQuantity={props.handleRemoveQuantity} />
@@ -47,10 +73,15 @@ function DisplayProducts(props) {
 const ItemRow = ({ item, handleShow, handleRemoveQuantity, handleAddQuantity }) => {
     return (
         <div key={item.id} className='d-flex flex-column item-row'>
-            <h5 className='d-flex justify-content-center' style={{width: "200px"}}>{item.desc}</h5>
+            <div className='d-flex flex-row'>
+                <h5 className='d-flex justify-content-center' style={{ width: "200px" }}>
+                    {item.desc}
+                </h5>
+                <h5 className='item-price'>{`$${item.price}`}</h5>
+            </div>
             <div className='d-flex align-items-center gap-2'>
                 <div className='d-flex align-items-center image-size'>
-                    <img style={{ cursor: 'pointer', width: "100%"}} src={item.image} alt={item.desc} onClick={() => handleShow(item)} />
+                    <img style={{ cursor: 'pointer', width: "100%" }} src={item.image} alt={item.desc} onClick={() => handleShow(item)} />
                 </div>
                 <button type='button' className='addOrRemoveButton'>
                     <FontAwesomeIcon
@@ -87,5 +118,18 @@ const ItemQuantity = ({ value }) => {
         </div>
     );
 };
+
+const SortRow = ({ setSortType }) => {
+    return (
+        <div className='sort-row'>
+                <label>Sort Price By: </label> &nbsp;
+                <select onChange={(e) => setSortType(e.target.value)}>
+                    <option value="normal">Normal</option>
+                    <option value="highest">Highest</option>
+                    <option value="lowest">Lowest</option>
+                </select>
+            </div>
+    )
+}
 
 export default DisplayProducts;
